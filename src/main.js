@@ -93,32 +93,69 @@ const revealObserver = new IntersectionObserver(
 revealEls.forEach((el) => revealObserver.observe(el));
 
 // Terapkan efek tilt hanya saat pointer berada di atas kartu atau panel hero yang interaktif.
-const tiltEls = document.querySelectorAll('.tilt-card, .project-card, .skill-card, .hero-panel');
-window.addEventListener('mousemove', (e) => {
-  const x = e.clientX / window.innerWidth;
-  const y = e.clientY / window.innerHeight;
-  const heroStage = document.querySelector('.hero-stage');
-  const offsetX = (x - 0.5) * 28;
-  const offsetY = (y - 0.5) * 28;
-
-  if (heroStage) {
-    heroStage.style.transform = `rotateX(${offsetY * -0.18}deg) rotateY(${offsetX * 0.22}deg)`;
-  }
-
-  document.querySelectorAll('.floating-cube, .orbit, .hero-ring').forEach((item) => {
-    const depth = Number(item.dataset.depth || 1);
-    const moveX = (x - 0.5) * 24 * depth;
-    const moveY = (y - 0.5) * 24 * depth;
-    item.style.transform = `translate3d(${moveX}px, ${moveY}px, 0)`;
-  });
-
-  tiltEls.forEach((el) => {
+// Gunakan handler pointer per-elemen sehingga hanya elemen yang dihover yang bereaksi.
+// (Catatan: `.hero-panel` dikeluarkan dari daftar ini — ia akan mengikuti kursor secara global.)
+const tiltTargets = document.querySelectorAll('.tilt-card, .project-card, .skill-card');
+tiltTargets.forEach((el) => {
+  el.addEventListener('pointermove', (e) => {
     const rect = el.getBoundingClientRect();
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
     const rotateX = ((e.clientY - centerY) / rect.height) * -10;
     const rotateY = ((e.clientX - centerX) / rect.width) * 10;
     el.style.transform = `perspective(1200px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+  });
+  el.addEventListener('pointerleave', () => {
+    // Kembalikan transform saat pointer keluar elemen
+    el.style.transform = '';
+  });
+});
+
+// Hero stage: hanya bereaksi saat pointer berada di area hero-stage
+const heroStage = document.querySelector('.hero-stage');
+if (heroStage) {
+  heroStage.addEventListener('pointermove', (e) => {
+    const rect = heroStage.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width;
+    const y = (e.clientY - rect.top) / rect.height;
+    const offsetX = (x - 0.5) * 28;
+    const offsetY = (y - 0.5) * 28;
+    heroStage.style.transform = `rotateX(${offsetY * -0.18}deg) rotateY(${offsetX * 0.22}deg)`;
+  });
+  heroStage.addEventListener('pointerleave', () => {
+    heroStage.style.transform = '';
+  });
+}
+
+// Buat `.hero-panel` mengikuti kursor secara global — bereaksi ke posisi kursor walau bukan di atas elemen.
+const heroPanel = document.querySelector('.hero-panel');
+if (heroPanel) {
+  window.addEventListener('mousemove', (e) => {
+    const rect = heroPanel.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const rotateX = ((e.clientY - centerY) / rect.height) * -10;
+    const rotateY = ((e.clientX - centerX) / rect.width) * 10;
+    heroPanel.style.transform = `perspective(1200px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+  });
+  // Reset transform saat pointer meninggalkan jendela/viewport
+  window.addEventListener('mouseout', (ev) => {
+    if (!ev.relatedTarget) heroPanel.style.transform = '';
+  });
+}
+
+// Floating elements (kubus, orbit, ring) bereaksi hanya saat pointer berada di atasnya
+document.querySelectorAll('.floating-cube, .orbit, .hero-ring').forEach((item) => {
+  item.addEventListener('pointermove', (e) => {
+    const rect = item.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width;
+    const depth = Number(item.dataset.depth || 1);
+    const moveX = (x - 0.5) * 24 * depth;
+    const moveY = ((e.clientY - rect.top) / rect.height - 0.5) * 24 * depth;
+    item.style.transform = `translate3d(${moveX}px, ${moveY}px, 0)`;
+  });
+  item.addEventListener('pointerleave', () => {
+    item.style.transform = '';
   });
 });
 
