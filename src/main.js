@@ -1,18 +1,22 @@
 import './style.css';
 
+// Sembunyikan layar loading setelah halaman selesai dimuat.
 const loadingScreen = document.querySelector('#loading-screen');
 window.addEventListener('load', () => {
   setTimeout(() => loadingScreen?.classList.add('hidden'), 700);
 });
 
+// Buka atau tutup menu navigasi mobile saat tombol hamburger diklik.
 const menuBtn = document.querySelector('#menuBtn');
 const mobileMenu = document.querySelector('#mobileMenu');
 menuBtn?.addEventListener('click', () => mobileMenu?.classList.toggle('hidden'));
 
+// Tutup menu mobile saat salah satu tautan navigasi dipilih.
 document.querySelectorAll('.nav-link').forEach((link) => {
   link.addEventListener('click', () => mobileMenu?.classList.add('hidden'));
 });
 
+// Efek ketik untuk teks headline hero.
 const typingText = document.querySelector('.typing-text');
 const phrases = ['Full Stack Developer', 'UI Engineer', 'Creative Coder'];
 let phraseIndex = 0;
@@ -22,6 +26,8 @@ let deleting = false;
 function typeLoop() {
   const current = phrases[phraseIndex];
   if (!typingText) return;
+
+  // Tambahkan karakter satu per satu, lalu hapus untuk menciptakan animasi mengetik.
 
   if (!deleting) {
     charIndex++;
@@ -45,6 +51,7 @@ function typeLoop() {
 
 typeLoop();
 
+// Animasi counter statistik saat elemen masuk ke area tampilan.
 const counters = document.querySelectorAll('.counter');
 const counterObserver = new IntersectionObserver(
   (entries) => {
@@ -70,6 +77,7 @@ const counterObserver = new IntersectionObserver(
 
 counters.forEach((counter) => counterObserver.observe(counter));
 
+// Tampilkan bagian konten secara halus saat digulir masuk ke tampilan.
 const revealEls = document.querySelectorAll('.reveal');
 const revealObserver = new IntersectionObserver(
   (entries) => {
@@ -84,6 +92,7 @@ const revealObserver = new IntersectionObserver(
 );
 revealEls.forEach((el) => revealObserver.observe(el));
 
+// Terapkan efek tilt hanya saat pointer berada di atas kartu atau panel hero yang interaktif.
 const tiltEls = document.querySelectorAll('.tilt-card, .project-card, .skill-card, .hero-panel');
 window.addEventListener('mousemove', (e) => {
   const x = e.clientX / window.innerWidth;
@@ -113,6 +122,7 @@ window.addEventListener('mousemove', (e) => {
   });
 });
 
+// Sorot tautan navigasi aktif berdasarkan bagian yang sedang terlihat.
 const sections = document.querySelectorAll('main section[id]');
 const navLinks = document.querySelectorAll('.nav-link');
 const progressBar = document.createElement('div');
@@ -136,6 +146,7 @@ window.addEventListener('scroll', () => {
   });
 });
 
+// Pindahkan cahaya cursor lembut mengikuti posisi pointer.
 const cursorGlow = document.querySelector('#cursor-glow');
 window.addEventListener('mousemove', (e) => {
   if (!cursorGlow) return;
@@ -143,6 +154,7 @@ window.addEventListener('mousemove', (e) => {
   cursorGlow.style.transform = `translate(${e.clientX - 100}px, ${e.clientY - 100}px)`;
 });
 
+// Tambahkan efek magnetik halus pada tombol CTA saat dihover.
 const buttons = document.querySelectorAll('.magnetic-btn');
 buttons.forEach((button) => {
   button.addEventListener('mousemove', (e) => {
@@ -157,6 +169,7 @@ buttons.forEach((button) => {
   });
 });
 
+// Buat efek riak saat tombol atau tombol tutup modal diklik.
 const rippleButtons = document.querySelectorAll('.magnetic-btn, .close-modal');
 rippleButtons.forEach((button) => {
   button.addEventListener('click', function (e) {
@@ -171,6 +184,7 @@ rippleButtons.forEach((button) => {
   });
 });
 
+// Validasi form kontak dan tampilkan pesan sukses setelah pengiriman.
 const form = document.querySelector('#contactForm');
 const formMessage = document.querySelector('#formMessage');
 form?.addEventListener('submit', (e) => {
@@ -184,6 +198,7 @@ form?.addEventListener('submit', (e) => {
   form.reset();
 });
 
+// Buka dan tutup modal pratinjau sertifikat.
 const modalButtons = document.querySelectorAll('[data-modal]');
 const modals = document.querySelectorAll('.modal');
 modalButtons.forEach((button) => {
