@@ -21,6 +21,7 @@ main section {
 .gradient-text {
   background: linear-gradient(90deg, #3b82f6, #8b5cf6, #06b6d4);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
