@@ -74,7 +74,7 @@ document.querySelectorAll('.nav-link').forEach((link) => {
 
 // Efek ketik untuk teks headline hero.
 const typingText = document.querySelector('.typing-text');
-const phrases = ['Website Developer', 'Mobile Developer', 'Quality Assurance'];
+const phrases = ['Website Developer', 'Mobile Developer', 'Vibe Coding', 'Quality Assurance'];
 let phraseIndex = 0;
 let charIndex = 0;
 let deleting = false;
