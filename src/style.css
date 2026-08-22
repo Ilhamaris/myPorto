@@ -276,6 +276,34 @@ main section {
   display: block;
 }
 
+.certificate-preview object {
+  display: block;
+  width: calc(100% + 18px);
+  height: 100%;
+  margin-right: -18px;
+  border: 0;
+  pointer-events: none;
+}
+
+.certificate-preview--landscape object {
+  width: calc(100% + 18px);
+  height: 135%;
+  transform: scale(1.8);
+  transform-origin: center top;
+  -webkit-transform: scale(1.8);
+  -moz-transform: scale(1.8);
+  -ms-transform: scale(1.8);
+  -o-transform: scale(1.8);
+}
+
+.certificate-fallback {
+  display: grid;
+  height: 100%;
+  place-items: center;
+  color: #111827;
+  font-weight: 600;
+}
+
 /* Cahaya lembut yang mengikuti pointer untuk efek gerak premium. */
 #cursor-glow {
   width: 180px;

@@ -60,7 +60,7 @@ if (document.readyState === 'complete') {
   window.addEventListener('load', markWindowLoaded);
 }
 
-await loadComponents();
+loadComponents().then(() => {
 
 // Buka atau tutup menu navigasi mobile saat tombol hamburger diklik.
 const menuBtn = document.querySelector('#menuBtn');
@@ -307,4 +307,5 @@ document.querySelectorAll('.close-modal').forEach((button) => {
     button.closest('.modal')?.classList.add('hidden');
     button.closest('.modal')?.classList.remove('flex');
   });
+});
 });
