@@ -1,1 +1,4 @@
 /readme.MD
+node_modules
+dist
+.env
