@@ -21,6 +21,7 @@ main section {
 .gradient-text {
   background: linear-gradient(90deg, #3b82f6, #8b5cf6, #06b6d4);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -34,6 +35,93 @@ main section {
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
   border: 1px solid rgba(255,255,255,0.12);
   transform-style: preserve-3d;
+}
+
+.skills-marquee {
+  display: grid;
+  gap: 1.25rem;
+  overflow: hidden;
+}
+
+.skills-marquee-row {
+  overflow: hidden;
+}
+
+.skills-marquee-track,
+.skills-marquee-set {
+  display: flex;
+  width: max-content;
+}
+
+.skills-marquee-track {
+  animation: skills-marquee-left 32s linear infinite;
+  will-change: transform;
+}
+
+.skills-marquee-row--right .skills-marquee-track {
+  animation-name: skills-marquee-right;
+}
+
+.skills-marquee-set {
+  gap: 1.25rem;
+  padding-right: 1.25rem;
+}
+
+.skills-marquee-set .skill-card {
+  flex: 0 0 clamp(230px, 27vw, 280px);
+}
+
+.skills-marquee-row:hover .skills-marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes skills-marquee-left {
+  to { transform: translateX(-50%); }
+}
+
+@keyframes skills-marquee-right {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skills-marquee {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    overflow: visible;
+  }
+
+  .skills-marquee-row,
+  .skills-marquee-track {
+    overflow: visible;
+    animation: none;
+  }
+
+  .skills-marquee-row,
+  .skills-marquee-track,
+  .skills-marquee-set {
+    display: contents;
+    width: auto;
+  }
+
+  .skills-marquee-set[aria-hidden="true"] {
+    display: none;
+  }
+
+  .skills-marquee-set .skill-card {
+    width: auto;
+  }
+
+  @media (min-width: 768px) {
+    .skills-marquee {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .skills-marquee {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
 }
 
 /* Kontainer 3D untuk adegan visual hero. */
@@ -59,14 +147,23 @@ main section {
 
 /* Placeholder foto profil dengan cahaya neon lembut. */
 .profile-photo {
-  width: 160px;
-  height: 160px;
-  border-radius: 9999px;
-  background:
-    radial-gradient(circle at 30% 30%, rgba(6,182,212,0.9), transparent 26%),
-    radial-gradient(circle at 70% 20%, rgba(59,130,246,0.85), transparent 22%),
-    linear-gradient(135deg, #1e293b, #0f172a);
-  box-shadow: 0 0 40px rgba(59,130,246,0.35);
+  display: none;
+}
+
+.about-photo-card {
+  min-height: 280px;
+  background-image: url("../image/ppAbout.jpeg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: transform 0.35s ease, box-shadow 0.35s ease, filter 0.35s ease;
+  cursor: pointer;
+}
+
+.about-photo-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.32);
+  filter: brightness(1.05) saturate(1.08);
 }
 
 /* Spinner loading yang ditampilkan saat konten halaman sedang disiapkan. */
@@ -264,6 +361,34 @@ main section {
   break-inside: avoid;
   margin-bottom: 1rem;
   display: block;
+}
+
+.certificate-preview object {
+  display: block;
+  width: calc(100% + 18px);
+  height: 100%;
+  margin-right: -18px;
+  border: 0;
+  pointer-events: none;
+}
+
+.certificate-preview--landscape object {
+  width: calc(100% + 18px);
+  height: 135%;
+  transform: scale(1.8);
+  transform-origin: center top;
+  -webkit-transform: scale(1.8);
+  -moz-transform: scale(1.8);
+  -ms-transform: scale(1.8);
+  -o-transform: scale(1.8);
+}
+
+.certificate-fallback {
+  display: grid;
+  height: 100%;
+  place-items: center;
+  color: #111827;
+  font-weight: 600;
 }
 
 /* Cahaya lembut yang mengikuti pointer untuk efek gerak premium. */

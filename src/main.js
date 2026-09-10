@@ -1,10 +1,66 @@
 import './style.css';
 
-// Sembunyikan layar loading setelah halaman selesai dimuat.
-const loadingScreen = document.querySelector('#loading-screen');
-window.addEventListener('load', () => {
-  setTimeout(() => loadingScreen?.classList.add('hidden'), 700);
-});
+const componentMap = [
+  { placeholderId: 'component-loading-screen', filePath: '/component/loading-screen.html' },
+  { placeholderId: 'component-cursor-glow', filePath: '/component/cursor-glow.html' },
+  { placeholderId: 'component-header', filePath: '/component/header.html' },
+  { placeholderId: 'component-hero', filePath: '/component/hero.html' },
+  { placeholderId: 'component-about', filePath: '/component/about.html' },
+  { placeholderId: 'component-skills', filePath: '/component/skills.html' },
+  { placeholderId: 'component-projects', filePath: '/component/projects.html' },
+  { placeholderId: 'component-experience', filePath: '/component/experience.html' },
+  { placeholderId: 'component-certificates', filePath: '/component/certificates.html' },
+  { placeholderId: 'component-contact', filePath: '/component/contact.html' },
+  { placeholderId: 'component-footer', filePath: '/component/footer.html' },
+  { placeholderId: 'component-modals', filePath: '/component/modals.html' },
+];
+
+let componentsLoaded = false;
+let windowLoaded = false;
+
+function hideLoadingScreen() {
+  const loadingScreen = document.querySelector('#loading-screen');
+  if (!loadingScreen) return;
+  loadingScreen.classList.add('hidden');
+}
+
+async function loadComponents() {
+  await Promise.all(
+    componentMap.map(async ({ placeholderId, filePath }) => {
+      try {
+        const response = await fetch(filePath);
+        if (!response.ok) {
+          console.error(`Failed to load component ${filePath}: ${response.status}`);
+          return;
+        }
+        const html = await response.text();
+        const container = document.getElementById(placeholderId);
+        if (container) container.innerHTML = html;
+      } catch (error) {
+        console.error(`Error loading component ${filePath}:`, error);
+      }
+    })
+  );
+  componentsLoaded = true;
+  if (windowLoaded) {
+    setTimeout(hideLoadingScreen, 200);
+  }
+}
+
+function markWindowLoaded() {
+  windowLoaded = true;
+  if (componentsLoaded) {
+    setTimeout(hideLoadingScreen, 200);
+  }
+}
+
+if (document.readyState === 'complete') {
+  markWindowLoaded();
+} else {
+  window.addEventListener('load', markWindowLoaded);
+}
+
+loadComponents().then(() => {
 
 // Buka atau tutup menu navigasi mobile saat tombol hamburger diklik.
 const menuBtn = document.querySelector('#menuBtn');
@@ -18,7 +74,7 @@ document.querySelectorAll('.nav-link').forEach((link) => {
 
 // Efek ketik untuk teks headline hero.
 const typingText = document.querySelector('.typing-text');
-const phrases = ['Full Stack Developer', 'UI Engineer', 'Creative Coder'];
+const phrases = ['Website Developer', 'Mobile Developer', 'Vibe Coding', 'Quality Assurance'];
 let phraseIndex = 0;
 let charIndex = 0;
 let deleting = false;
@@ -251,4 +307,5 @@ document.querySelectorAll('.close-modal').forEach((button) => {
     button.closest('.modal')?.classList.add('hidden');
     button.closest('.modal')?.classList.remove('flex');
   });
+});
 });
